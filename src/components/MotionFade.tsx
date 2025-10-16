@@ -1,29 +1,27 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, type HTMLMotionProps } from "framer-motion";
 import type { CSSProperties, ReactNode } from "react";
 
-export interface MotionFadeProps {
+type MotionFadeBaseProps = {
   children: ReactNode;
   className?: string;
-  /** forward standard attributes to the wrapper */
   id?: string;
   style?: CSSProperties;
-  /** optional as-prop if you want a different tag later */
-  as?: keyof JSX.IntrinsicElements;
-}
+};
+
+/** Extra motion props are allowed (e.g. onViewportEnter), but we keep it a div to avoid `any`. */
+export type MotionFadeProps = MotionFadeBaseProps &
+  Omit<HTMLMotionProps<"div">, "children" | "className" | "style" | "id">;
 
 export default function MotionFade({
   children,
   className,
   id,
   style,
-  as: Tag = "div",
+  ...rest
 }: MotionFadeProps) {
-  // use motion.[tag] – default to motion.div
-  const MotionTag: any = motion[Tag as keyof typeof motion] ?? motion.div;
-
   return (
-    <MotionTag
+    <motion.div
       id={id}
       className={className}
       style={style}
@@ -31,8 +29,9 @@ export default function MotionFade({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       viewport={{ once: true, amount: 0.2 }}
+      {...rest}
     >
       {children}
-    </MotionTag>
+    </motion.div>
   );
 }
