@@ -1,26 +1,38 @@
 "use client";
-import { motion, useReducedMotion } from "framer-motion";
-import { ReactNode } from "react";
+import { motion } from "framer-motion";
+import type { CSSProperties, ReactNode } from "react";
 
-type MotionFadeProps = {
+export interface MotionFadeProps {
   children: ReactNode;
   className?: string;
-  delay?: number;
-};
-
-export default function MotionFade({ children, className, delay = 0 }: MotionFadeProps) {
-  const prefersReduced = useReducedMotion();
-  return (
-    <motion.div
-      className={className}
-      initial={prefersReduced ? false : { opacity: 0, y: 16 }}
-      whileInView={prefersReduced ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={prefersReduced ? undefined : { duration: 0.6, ease: "easeOut", delay }}
-    >
-      {children}
-    </motion.div>
-  );
+  /** forward standard attributes to the wrapper */
+  id?: string;
+  style?: CSSProperties;
+  /** optional as-prop if you want a different tag later */
+  as?: keyof JSX.IntrinsicElements;
 }
 
+export default function MotionFade({
+  children,
+  className,
+  id,
+  style,
+  as: Tag = "div",
+}: MotionFadeProps) {
+  // use motion.[tag] – default to motion.div
+  const MotionTag: any = motion[Tag as keyof typeof motion] ?? motion.div;
 
+  return (
+    <MotionTag
+      id={id}
+      className={className}
+      style={style}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true, amount: 0.2 }}
+    >
+      {children}
+    </MotionTag>
+  );
+}
