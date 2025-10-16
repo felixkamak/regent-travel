@@ -1,6 +1,5 @@
 "use client";
 import { useCallback, useMemo, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import Button from "@/components/Button";
 import { siteConfig } from "@/site.config";
@@ -8,7 +7,7 @@ import { Txt, useI18n } from "@/components/LocaleProvider";
 
 type FormState = {
   name: string;
-  contact: string;
+  contact: string; // Email or WeChat
   dates: string;
   groupSize: string;
   interests: string[];
@@ -38,8 +37,10 @@ export default function BookPage() {
         | React.ChangeEvent<HTMLInputElement>
         | React.ChangeEvent<HTMLTextAreaElement>
     ) => {
-      const { name, value, type } = e.target as HTMLInputElement;
-      if (type === "checkbox") {
+      const target = e.target as HTMLInputElement;
+      const { name, value, type } = target;
+
+      if (type === "checkbox" && name === "interests") {
         setForm((prev) => {
           const exists = prev.interests.includes(value);
           return {
@@ -103,9 +104,11 @@ export default function BookPage() {
         setTimeout(() => setToast(null), 3000);
         return;
       }
+
       setSubmitting(true);
       const ok = await submitToFormspree();
       setSubmitting(false);
+
       if (ok) {
         setToast(t("book.success"));
         setForm(initialFormState);
@@ -122,6 +125,20 @@ export default function BookPage() {
     },
     [form, submitToFormspree, fallbackMailto, locale, t]
   );
+
+  // Typed config for the input fields (no `any`)
+  const fields: Array<{
+    name: keyof Pick<FormState, "name" | "contact" | "dates" | "groupSize">;
+    i18n: string;
+    type?: "text" | "number";
+    required?: boolean;
+    min?: number;
+  }> = [
+    { name: "name", i18n: "book.name", type: "text", required: true },
+    { name: "contact", i18n: "book.email", type: "text", required: true },
+    { name: "dates", i18n: "book.date", type: "text", required: true },
+    { name: "groupSize", i18n: "book.size", type: "number", min: 1 },
+  ];
 
   return (
     <div className="py-6">
@@ -204,37 +221,37 @@ export default function BookPage() {
                 </div>
               )}
 
-              {[
-                ["name", "book.name"],
-                ["contact", "book.email"],
-                ["dates", "book.date"],
-                ["groupSize", "book.size"],
-              ].map(([name, key]) => (
-                <div key={name}>
-                  <div className="relative">
-                    <input
-                      id={name}
-                      name={name}
-                      type={name === "groupSize" ? "number" : "text"}
-                      required={["name", "contact", "dates"].includes(name)}
-                      min={name === "groupSize" ? 1 : undefined}
-                      value={(form as any)[name]}
-                      onChange={handleChange}
-                      placeholder=" "
-                      className="peer w-full rounded-md border border-[var(--brand-sand)] bg-white px-3 py-3 text-sm text-[color:var(--brand-ink)] placeholder-transparent shadow-sm focus-visible:ring-2 focus-visible:ring-[var(--brand-gold)]"
-                    />
-                    <label
-                      htmlFor={name}
-                      className="pointer-events-none absolute left-3 top-2.5 text-sm text-[color:var(--muted)] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-[13px] peer-focus:top-2.5 peer-focus:text-sm"
-                    >
-                      <Txt k={key as any} />
-                    </label>
+              {fields.map((f) => {
+                const value = form[f.name]; // all of these are strings
+                return (
+                  <div key={f.name}>
+                    <div className="relative">
+                      <input
+                        id={f.name}
+                        name={f.name}
+                        type={f.type ?? "text"}
+                        required={!!f.required}
+                        min={f.min}
+                        value={value}
+                        onChange={handleChange}
+                        placeholder=" "
+                        className="peer w-full rounded-md border border-[var(--brand-sand)] bg-white px-3 py-3 text-sm text-[color:var(--brand-ink)] placeholder-transparent shadow-sm focus-visible:ring-2 focus-visible:ring-[var(--brand-gold)]"
+                      />
+                      <label
+                        htmlFor={f.name}
+                        className="pointer-events-none absolute left-3 top-2.5 text-sm text-[color:var(--muted)] transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-[13px] peer-focus:top-2.5 peer-focus:text-sm"
+                      >
+                        <Txt k={f.i18n} />
+                      </label>
+                    </div>
+                    {errors[f.name] && (
+                      <p className="mt-1 text-xs text-red-700">
+                        {errors[f.name]}
+                      </p>
+                    )}
                   </div>
-                  {errors[name] && (
-                    <p className="mt-1 text-xs text-red-700">{errors[name]}</p>
-                  )}
-                </div>
-              ))}
+                );
+              })}
 
               <fieldset className="space-y-2">
                 <legend className="text-sm font-medium text-[#3a2b1e]">
