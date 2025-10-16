@@ -1,26 +1,87 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* brand palette */
+  --brand-ink: #0F2A24;
+  --brand-ivory: #FAF7F1;
+  --brand-sand: #E9E1D4;
+  --brand-gold: #C6A15B;
+  --muted: #6C6A64;
+
+  /* font variables populated by next/font in layout */
+  --font-inter: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-playfair: serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--brand-ivory);
+  --color-foreground: var(--brand-ink);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-ivory: var(--brand-ivory);
+  --color-brand-sand: var(--brand-sand);
+  --color-brand-gold: var(--brand-gold);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-playfair);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--brand-ivory);
+  color: var(--brand-ink);
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--brand-ivory);
+  color: var(--brand-ink);
+  font-family: var(--font-inter);
+  line-height: 1.65;
+  letter-spacing: 0.005em;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-playfair);
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: var(--brand-ink);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: color-mix(in oklab, var(--brand-ink) 88%, var(--brand-gold) 12%);
+  text-decoration: underline;
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--brand-gold);
+}
+
+/* Sticky header helper class */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: saturate(180%) blur(8px);
+  background-color: color-mix(in oklab, var(--brand-ivory) 88%, white 12%);
+}
+
+/* Utility container */
+.container-pro {
+  max-width: 72rem; /* 6xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-pro { padding-left: 1.5rem; padding-right: 1.5rem; }
+}
+@media (min-width: 1024px) {
+  .container-pro { padding-left: 2rem; padding-right: 2rem; }
 }

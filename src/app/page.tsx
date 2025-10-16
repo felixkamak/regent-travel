@@ -1,103 +1,181 @@
+"use client";
 import Image from "next/image";
+import Link from "next/link";
+import Button from "@/components/Button";
+import { images } from "@/images";
+import Hero from "@/components/Hero";
+import MotionFade from "@/components/MotionFade";
+import { Txt, useI18n } from "@/components/LocaleProvider";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { t } = useI18n();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="space-y-12">
+      {/* Full-bleed Hero */}
+      <Hero
+        title={<Txt k="hero.title" />}
+        sub={<Txt k="hero.sub" />}
+        primaryLabel={t("cta.discover")}
+        secondaryLabel={t("cta.book")}
+      />
+
+      {/* Featured section */}
+      <MotionFade className="space-y-6">
+        <h2 className="text-xl font-semibold text-[#3a2b1e]">
+          <Txt k="home.featured" />
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {/* Ceramics */}
+          <article className="group h-full rounded-xl bg-white/90 overflow-hidden border border-[var(--brand-sand)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:border-[var(--brand-gold)]">
+            <div className="relative aspect-[3/2] overflow-hidden">
+              <Image
+                src={images.ceramics}
+                alt="Qingyuan ceramics"
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+              />
+            </div>
+            <div className="p-5 flex flex-col h-full">
+              <h3
+                className="text-[color:var(--brand-ink)] text-lg font-semibold"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                <Txt k="home.ceramics.title" />
+              </h3>
+              <div className="my-3 h-px bg-[color:var(--brand-sand)]/80" />
+              <p className="text-sm text-[color:var(--muted)] flex-1">
+                <Txt k="home.ceramics.desc" />
+              </p>
+              <div className="pt-3">
+                <Link className="text-sm underline" href="/qingyuan#ceramics">
+                  {t("qingyuan.planRoute")}
+                </Link>
+              </div>
+            </div>
+          </article>
+
+          {/* Tea */}
+          <article className="group h-full rounded-xl bg-white/90 overflow-hidden border border-[var(--brand-sand)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:border-[var(--brand-gold)]">
+            <div className="relative aspect-[3/2] overflow-hidden">
+              <Image
+                src={images.tea}
+                alt="Tea gardens"
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+              />
+            </div>
+            <div className="p-5 flex flex-col h-full">
+              <h3
+                className="text-[color:var(--brand-ink)] text-lg font-semibold"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                <Txt k="home.tea.title" />
+              </h3>
+              <div className="my-3 h-px bg-[color:var(--brand-sand)]/80" />
+              <p className="text-sm text-[color:var(--muted)] flex-1">
+                <Txt k="home.tea.desc" />
+              </p>
+              <div className="pt-3">
+                <Link className="text-sm underline" href="/qingyuan#tea">
+                  {t("qingyuan.planRoute")}
+                </Link>
+              </div>
+            </div>
+          </article>
+
+          {/* River & Culture */}
+          <article className="group h-full rounded-xl bg-white/90 overflow-hidden border border-[var(--brand-sand)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:border-[var(--brand-gold)]">
+            <div className="relative aspect-[3/2] overflow-hidden">
+              <Image
+                src={images.river}
+                alt="River and culture"
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+              />
+            </div>
+            <div className="p-5 flex flex-col h-full">
+              <h3
+                className="text-[color:var(--brand-ink)] text-lg font-semibold"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                <Txt k="home.river.title" />
+              </h3>
+              <div className="my-3 h-px bg-[color:var(--brand-sand)]/80" />
+              <p className="text-sm text-[color:var(--muted)] flex-1">
+                <Txt k="home.river.desc" />
+              </p>
+              <div className="pt-3">
+                <Link className="text-sm underline" href="/qingyuan#culture">
+                  {t("qingyuan.planRoute")}
+                </Link>
+              </div>
+            </div>
+          </article>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </MotionFade>
+
+      {/* Why travel with us */}
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold text-[#3a2b1e]">
+          <Txt k="home.whyTravel" />
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="rounded-lg border border-[#e4d9cc] bg-white/70 p-4 shadow-sm">
+            <h3 className="font-medium text-[#3a2b1e]">
+              <Txt k="home.localPartners" />
+            </h3>
+            <p className="text-sm text-[#6b5847]">
+              <Txt k="home.localPartners.desc" />
+            </p>
+          </div>
+          <div className="rounded-lg border border-[#e4d9cc] bg-white/70 p-4 shadow-sm">
+            <h3 className="font-medium text-[#3a2b1e]">
+              <Txt k="home.flexible" />
+            </h3>
+            <p className="text-sm text-[#6b5847]">
+              <Txt k="home.flexible.desc" />
+            </p>
+          </div>
+          <div className="rounded-lg border border-[#e4d9cc] bg-white/70 p-4 shadow-sm">
+            <h3 className="font-medium text-[#3a2b1e]">
+              <Txt k="home.bilingual" />
+            </h3>
+            <p className="text-sm text-[#6b5847]">
+              <Txt k="home.bilingual.desc" />
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold text-[#3a2b1e]">
+          <Txt k="home.testimonials" />
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <figure className="rounded-lg border border-[#e4d9cc] bg-white/70 p-4 shadow-sm">
+            <blockquote className="text-sm text-[#3a2b1e]">
+              <Txt k="home.review1.text" />
+            </blockquote>
+            <figcaption className="text-xs text-[#6b5847] mt-2">
+              <Txt k="home.review1.author" />
+            </figcaption>
+          </figure>
+
+          <figure className="rounded-lg border border-[#e4d9cc] bg-white/70 p-4 shadow-sm">
+            <blockquote className="text-sm text-[#3a2b1e]">
+              <Txt k="home.review2.text" />
+            </blockquote>
+            <figcaption className="text-xs text-[#6b5847] mt-2">
+              <Txt k="home.review2.author" />
+            </figcaption>
+          </figure>
+        </div>
+      </section>
     </div>
   );
 }
